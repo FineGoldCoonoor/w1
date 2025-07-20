@@ -1,128 +1,207 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+  <meta charset="UTF-8"/>
+  <title>AR Ad – Multiple Video Options</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <style>
-    body {
-      margin: 0;
-      font-family: 'Poppins', sans-serif;
+    html, body {
+      margin: 0; padding: 0; overflow: hidden; background: #000;
+    }
+    #cam {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+    #ad {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 12px;
+      border: 2px solid #fff;
+      display: none;
+      z-index: 5;
       background: #000;
-      color: #fff; /* Default font color to white */
     }
-
-    #logo {
+    #ppBtn {
       position: absolute;
-      top: 16px;
-      left: 16px;
-      width: 100px;
-      z-index: 100;
+      top: calc(50% + 140px); left: 50%;
+      transform: translateX(-50%);
+      padding: 8px 12px;
+      font-size: 20px;
+      border: none;
+      border-radius: 10%;
+      background: transparent;
+      color: transparent;
+      cursor: pointer;
+      z-index: 10;
+      box-shadow: 0 0 12px rgba(0,0,0,.6);
+      display: none;
     }
-
-    .button-panel {
+    .thumbnail-bar {
       position: absolute;
-      bottom: 20px;
+      bottom: 90px;
       left: 50%;
       transform: translateX(-50%);
       display: flex;
-      flex-direction: column;
-      gap: 12px;
-      z-index: 100;
-      align-items: center;
+      gap: 10px;
+      z-index: 10;
     }
-
-    .button-row {
+    .thumbnail {
+      width: 60px;
+      height: 40px;
+      background: #fff;
+      border: 2px solid #ccc;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
       display: flex;
-      gap: 12px;
+      align-items: center;
       justify-content: center;
+      font-weight: bold;
+      color: #000;
+    }
+    .thumbnail.selected {
+      border: 2px solid #00f;
     }
 
-    .plan-button {
-      padding: 10px 16px;
-      font-size: 14px;
-      font-weight: bold;
+    .bottom-buttons {
+      position: absolute;
+      bottom: 10px;
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 10;
+    }
+
+    .bottom-buttons button,
+    .bottom-buttons a {
+      background: transparent;
       border: none;
-      border-radius: 8px;
-      background-color: #5E0F8B;
-      color: #fff; /* Button text color changed to white */
+      padding: 0;
       cursor: pointer;
     }
 
-    .plan-button:hover {
-      background-color: #7c2eb3; /* slightly lighter purple on hover */
-    }
-
-    .a-enter-vr-button {
-      display: none !important;
+    .bottom-buttons img {
+      width: 42px;
+      height: 42px;
+      object-fit: contain;
     }
   </style>
 </head>
 <body>
 
-  <!-- Logo -->
-  <img src="logo.png" id="logo" alt="Logo">
+<video id="cam" autoplay muted playsinline></video>
 
-  <!-- Buttons Panel -->
-  <div class="button-panel" id="planButtons" style="display: none;">
-    <div class="button-row">
-      <button class="plan-button" data-video="plan1Video">Plan 1</button>
-      <button class="plan-button" data-video="plan2Video">Plan 2</button>
-      <button class="plan-button" data-video="plan3Video">Plan 3</button>
-    </div>
-    <div class="button-row">
-      <button class="plan-button" data-video="plan4Video">Plan 4</button>
-      <button class="plan-button" data-video="plan5Video">Plan 5</button>
-    </div>
-  </div>
+<!-- AR Video Ad -->
+<video id="ad" playsinline loop controls></video>
 
-  <!-- AR Scene -->
-  <a-scene mindar-image="imageTargetSrc: ./targets.mind" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
-    <a-assets>
-      <video id="plan1Video" src="plan1.mp4" playsinline loop></video>
-      <video id="plan2Video" src="plan2.mp4" playsinline loop></video>
-      <video id="plan3Video" src="plan3.mp4" playsinline loop></video>
-      <video id="plan4Video" src="plan4.mp4" playsinline loop></video>
-      <video id="plan5Video" src="plan5.mp4" playsinline loop></video>
-    </a-assets>
+<!-- Play/Pause -->
+<button id="ppBtn" title="Play/Pause">▶️</button>
 
-    <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+<!-- Video Thumbnails -->
+<div class="thumbnail-bar">
+  <div class="thumbnail" data-src="advertisement/promo1.mp4">PLAN1</div>
+  <div class="thumbnail" data-src="advertisement/promo2.mp4">PLAN2</div>
+  <div class="thumbnail" data-src="advertisement/promo3.mp4">PLAN3</div>
+  <div class="thumbnail" data-src="advertisement/promo4.mp4">PLAN4</div>
+  <div class="thumbnail" data-src="advertisement/promo5.mp4">PLAN5</div>
+</div>
 
-    <a-entity id="target1" mindar-image-target="targetIndex: 0">
-      <a-plane id="videoDisplay" position="0 0 0" height="0.59" width="1"></a-plane>
-    </a-entity>
-  </a-scene>
+<!-- Bottom Icons -->
+<div class="bottom-buttons">
+  <button id="shareBtn" title="Share">
+    <img src="share logo1.png" alt="Share">
+  </button>
+  <a href="https://maps.app.goo.gl/2g4prviFVzsdK14e9" target="_blank" title="Location">
+    <img src="loclogo1.png" alt="Location">
+  </a>
+  <a href="https://wa.me/916379907619?text=Hi%20Welcome%20to%20Fine%20Gold%20&%20Diamonds%20,%20Can%20i%20get%20more%20datails%20about%20the%20plans" target="_blank" title="WhatsApp">
+    <img src="logo whatsapp1.png" alt="WhatsApp">
+  </a>
+</div>
 
-  <script>
-    const videoDisplay = document.querySelector('#videoDisplay');
-    const buttonsContainer = document.querySelector('#planButtons');
-    const planButtons = document.querySelectorAll('.plan-button');
-    let currentVideo = null;
+<!-- Script Logic -->
+<script>
+  const btn = document.getElementById('ppBtn');
+  const ad = document.getElementById('ad');
+  const cam = document.getElementById('cam');
+  const thumbnails = document.querySelectorAll('.thumbnail');
 
-    const updateVideo = (videoId) => {
-      const videoEl = document.querySelector(`#${videoId}`);
-      if (currentVideo && currentVideo !== videoEl) {
-        currentVideo.pause();
+  let videoLoaded = false;
+  let currentVideoSrc = '';
+  let isPlaying = false;
+
+  // Camera Access
+  navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
+    .then(stream => {
+      cam.srcObject = stream;
+    })
+    .catch(err => {
+      alert('Unable to access the camera. Please allow camera permissions in your browser settings.');
+      console.error('Camera error:', err);
+    });
+
+  // Thumbnail Click
+  thumbnails.forEach(thumbnail => {
+    thumbnail.addEventListener('click', () => {
+      const src = thumbnail.dataset.src;
+      if (src !== currentVideoSrc) {
+        currentVideoSrc = src;
+        ad.src = src;
+        ad.load();
+        ad.volume = 1;
+        videoLoaded = true;
+        ad.style.display = 'block';
+        ad.play();
+        isPlaying = true;
+        btn.innerText = '⏸️';
+        btn.style.display = 'block';
+        thumbnails.forEach(t => t.classList.remove('selected'));
+        thumbnail.classList.add('selected');
       }
-      currentVideo = videoEl;
-      videoDisplay.setAttribute('material', 'src', `#${videoId}`);
-      currentVideo.play();
-    };
+    });
+  });
 
-    planButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        updateVideo(button.dataset.video);
+  // Play/Pause Toggle
+  btn.addEventListener('click', () => {
+    if (!videoLoaded) return;
+
+    if (ad.paused) {
+      ad.play().then(() => {
+        btn.innerText = '⏸️';
+        isPlaying = true;
+      }).catch(e => {
+        alert('Playback failed: ' + e.message);
       });
-    });
+    } else {
+      ad.pause();
+      btn.innerText = '▶️';
+      isPlaying = false;
+    }
+  });
 
-    const target = document.querySelector('#target1');
-    target.addEventListener('targetFound', () => {
-      buttonsContainer.style.display = 'flex';
-    });
-    target.addEventListener('targetLost', () => {
-      buttonsContainer.style.display = 'none';
-      if (currentVideo) currentVideo.pause();
-    });
-  </script>
+  // Web Share API
+  document.getElementById('shareBtn').addEventListener('click', async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'AR Video',
+          text: 'Check out this amazing AR experience!',
+          url: window.location.href
+        });
+      } catch (err) {
+        console.error('Share failed:', err.message);
+      }
+    } else {
+      alert('Sharing not supported on this device.');
+    }
+  });
+</script>
+
 </body>
 </html>
