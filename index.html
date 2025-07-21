@@ -67,6 +67,7 @@
     .thumbnail.selected {
       border: 2px solid #00f;
     }
+
     .bottom-buttons {
       position: absolute;
       bottom: 10px;
@@ -76,6 +77,7 @@
       align-items: center;
       z-index: 10;
     }
+
     .bottom-buttons button,
     .bottom-buttons a {
       background: transparent;
@@ -83,6 +85,7 @@
       padding: 0;
       cursor: pointer;
     }
+
     .bottom-buttons img {
       width: 42px;
       height: 42px;
@@ -94,8 +97,8 @@
 
 <video id="cam" autoplay muted playsinline></video>
 
-<!-- AR Video Ad (NO CONTROLS) -->
-<video id="ad" playsinline loop></video>
+<!-- AR Video Ad -->
+<video id="ad" playsinline loop controls></video>
 
 <!-- Play/Pause -->
 <button id="ppBtn" title="Play/Pause">▶️</button>
